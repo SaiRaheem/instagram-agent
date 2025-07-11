@@ -18,3 +18,11 @@ def trim_movie(movie_path, output_folder="clips", clip_length=60, max_clips=5):
 
 if __name__ == "__main__":
     trim_movie("500.mkv")
+import requests
+
+def download_movie(url="https://drive.google.com/uc?export=download&id=1jP_09FYxyb1QZhzwWzglHRWS8ZaRZnso", dest="500.mkv"):
+    response = requests.get(url, stream=True)
+    with open(dest, 'wb') as f:
+        for chunk in response.iter_content(chunk_size=8192):
+            if chunk:
+                f.write(chunk)
