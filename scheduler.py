@@ -4,7 +4,7 @@ from index import trim_movie, download_movie
 from uploader import upload_clip
 
 MOVIE_PATH = "500.mkv"
-DOWNLOAD_URL = "https://drive.google.com/uc?export=download&id=1jP_09FYxyb1QZhzwWzglHRWS8ZaRZnso"
+DRIVE_FILE_ID = "1jP_09FYxyb1QZhzwWzglHRWS8ZaRZnso"
 
 if __name__ == "__main__":
     while True:
@@ -14,7 +14,7 @@ if __name__ == "__main__":
             # 1. Check if movie exists
             if not os.path.exists(MOVIE_PATH):
                 print("🎥 Movie not found locally. Downloading...")
-                download_movie(DOWNLOAD_URL, MOVIE_PATH)
+                download_movie(DRIVE_FILE_ID, MOVIE_PATH)
                 print("✅ Download complete.")
 
             # 2. Check if clips are present

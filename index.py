@@ -1,13 +1,11 @@
-import requests
-import os
+import gdown
 from moviepy.editor import VideoFileClip
+import os
 
-def download_movie(url, filename="500.mkv"):
-    response = requests.get(url, stream=True)
-    with open(filename, "wb") as f:
-        for chunk in response.iter_content(chunk_size=8192):
-            if chunk:
-                f.write(chunk)
+def download_movie(file_id, output="500.mkv"):
+    print("⬇️ Downloading using gdown...")
+    url = f"https://drive.google.com/uc?id={file_id}"
+    gdown.download(url, output, quiet=False)
 
 def trim_movie(movie_path, output_folder="clips", clip_length=60):
     os.makedirs(output_folder, exist_ok=True)
@@ -21,13 +19,3 @@ def trim_movie(movie_path, output_folder="clips", clip_length=60):
         output_path = os.path.join(output_folder, f"clip_{count:04d}.mp4")
         subclip.write_videofile(output_path, codec='libx264')
         count += 1
-
-if __name__ == "__main__":
-    if not os.path.exists("500.mkv"):
-        print("🎥 Movie not found locally. Downloading...")
-        url = "https://drive.google.com/uc?export=download&id=1jP_09FYxyb1QZhzwWzglHRWS8ZaRZnso"
-        download_movie(url)
-        print("✅ Download complete.")
-
-    print("✂️ Trimming movie...")
-    trim_movie("500.mkv")
