@@ -1,7 +1,16 @@
-from moviepy.editor import VideoFileClip
 import os
+import requests
+from moviepy.editor import VideoFileClip
 
-def trim_movie(movie_path, output_folder="clips", clip_length=60):
+def download_movie(url, filename="500.mkv"):
+    print("⬇️ Downloading movie...")
+    response = requests.get(url, stream=True)
+    with open(filename, "wb") as f:
+        for chunk in response.iter_content(chunk_size=8192):
+            f.write(chunk)
+    print("✅ Download complete.")
+
+def trim_movie(movie_path="500.mkv", output_folder="clips", clip_length=60):
     os.makedirs(output_folder, exist_ok=True)
     clip = VideoFileClip(movie_path)
     duration = int(clip.duration)
@@ -13,6 +22,3 @@ def trim_movie(movie_path, output_folder="clips", clip_length=60):
         output_path = os.path.join(output_folder, f"clip_{count:04d}.mp4")
         subclip.write_videofile(output_path, codec='libx264')
         count += 1
-
-if __name__ == "__main__":
-    trim_movie("500.mkv")
