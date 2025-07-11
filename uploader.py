@@ -1,3 +1,11 @@
+import os
+os.makedirs("clips", exist_ok=True)  # ✅ Ensure folder exists on Railway
+
+from instagrapi import Client
+from dotenv import load_dotenv
+import random
+
+load_dotenv()
 from instagrapi import Client
 import os
 from dotenv import load_dotenv
