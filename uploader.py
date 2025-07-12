@@ -5,6 +5,10 @@ def upload_clip():
     IG_USERNAME = os.getenv("IG_USERNAME")
     IG_PASSWORD = os.getenv("IG_PASSWORD")
 
+    print("🔍 DEBUG IG_USERNAME =", IG_USERNAME)
+    print("🔍 DEBUG IG_PASSWORD is set:", bool(IG_PASSWORD))
+
+
     if not IG_USERNAME or not IG_PASSWORD:
         raise Exception("Both username and password must be provided.")
 
