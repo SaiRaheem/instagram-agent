@@ -5,14 +5,13 @@ def upload_clip():
     IG_USERNAME = os.getenv("IG_USERNAME")
     IG_PASSWORD = os.getenv("IG_PASSWORD")
 
-    # 🔍 Environment variable dump
+    # 🔍 Dump environment variables for debugging
     print("\n🔍 ENVIRONMENT DUMP")
     for key in sorted(os.environ):
         if "IG" in key:
             print(f"{key} = {os.environ[key]}")
     print("🔍 END ENV DUMP\n")
 
-    # Debug checks
     print("🔍 DEBUG IG_USERNAME =", IG_USERNAME)
     print("🔍 DEBUG IG_PASSWORD is set:", bool(IG_PASSWORD))
 
@@ -22,7 +21,7 @@ def upload_clip():
     clips_dir = "clips"
     posted_file = "posted.txt"
 
-    # Load posted clip history
+    # Load history of posted clips
     posted = set()
     if os.path.exists(posted_file):
         with open(posted_file, "r") as f:
@@ -38,13 +37,26 @@ def upload_clip():
 
     clip_path = os.path.join(clips_dir, next_clip)
 
-    # Upload
-    print(f"📤 Uploading {clip_path}")
+    # Initialize client and load session if available
     cl = Client()
-    cl.login(IG_USERNAME, IG_PASSWORD)
+    try:
+        if os.path.exists("session.json"):
+            cl.load_settings("session.json")
+            print("🔐 Loaded saved session.json")
+        cl.login(IG_USERNAME, IG_PASSWORD)
+        print("✅ Logged in successfully")
+    except Exception as e:
+        print(f"⚠️ Session failed: {e}")
+        print("🔁 Trying fresh login...")
+        cl.login(IG_USERNAME, IG_PASSWORD)
+        cl.dump_settings("session.json")
+        print("✅ New session saved to session.json")
+
+    # Upload the clip
+    print(f"📤 Uploading {clip_path}")
     cl.clip_upload(clip_path, f"🔥 Check out this clip: {next_clip}")
     print(f"✅ Uploaded: {next_clip}")
 
-    # Save uploaded clip to posted.txt
+    # Mark this clip as posted
     with open(posted_file, "a") as f:
         f.write(f"{next_clip}\n")
