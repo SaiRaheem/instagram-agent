@@ -1,8 +1,5 @@
 import os
 from instagrapi import Client
-from dotenv import load_dotenv
-
-load_dotenv()
 
 def upload_clip():
     IG_USERNAME = os.getenv("IG_USERNAME")
