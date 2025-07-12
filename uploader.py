@@ -12,9 +12,6 @@ def upload_clip():
             print(f"{key} = {os.environ[key]}")
     print("🔍 END ENV DUMP\n")
 
-    print("🔍 DEBUG IG_USERNAME =", IG_USERNAME)
-    print("🔍 DEBUG IG_PASSWORD is set:", bool(IG_PASSWORD))
-
     if not IG_USERNAME or not IG_PASSWORD:
         raise Exception("Both username and password must be provided.")
 
