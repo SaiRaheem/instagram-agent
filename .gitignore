@@ -3,3 +3,4 @@ __pycache__/
 *.pyc
 clips/
 posted.txt
+session.json
