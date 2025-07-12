@@ -3,6 +3,15 @@ import time
 from index import trim_movie, download_movie
 from uploader import upload_clip
 
+import requests
+
+try:
+    ip = requests.get("https://api.ipify.org").text
+    print(f"🌍 Public IP of Railway container: {ip}")
+except Exception as e:
+    print("❌ Failed to fetch public IP:", e)
+
+
 MOVIE_PATH = "test.mkv"
 
 # ✅ Force re-download of new test video
