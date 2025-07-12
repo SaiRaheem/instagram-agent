@@ -5,9 +5,16 @@ def upload_clip():
     IG_USERNAME = os.getenv("IG_USERNAME")
     IG_PASSWORD = os.getenv("IG_PASSWORD")
 
+    # 🔍 Environment variable dump
+    print("\n🔍 ENVIRONMENT DUMP")
+    for key in sorted(os.environ):
+        if "IG" in key:
+            print(f"{key} = {os.environ[key]}")
+    print("🔍 END ENV DUMP\n")
+
+    # Debug checks
     print("🔍 DEBUG IG_USERNAME =", IG_USERNAME)
     print("🔍 DEBUG IG_PASSWORD is set:", bool(IG_PASSWORD))
-
 
     if not IG_USERNAME or not IG_PASSWORD:
         raise Exception("Both username and password must be provided.")
@@ -15,7 +22,7 @@ def upload_clip():
     clips_dir = "clips"
     posted_file = "posted.txt"
 
-    # Load posted history
+    # Load posted clip history
     posted = set()
     if os.path.exists(posted_file):
         with open(posted_file, "r") as f:
@@ -38,11 +45,6 @@ def upload_clip():
     cl.clip_upload(clip_path, f"🔥 Check out this clip: {next_clip}")
     print(f"✅ Uploaded: {next_clip}")
 
-    # Save to posted.txt
+    # Save uploaded clip to posted.txt
     with open(posted_file, "a") as f:
         f.write(f"{next_clip}\n")
-print("\n🔍 ENVIRONMENT DUMP")
-for key in sorted(os.environ):
-    if "IG" in key:
-        print(f"{key} = {os.environ[key]}")
-print("🔍 END ENV DUMP\n")
