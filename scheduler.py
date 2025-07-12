@@ -1,13 +1,13 @@
-# Force re-download by removing existing file
-if os.path.exists("500.mkv"):
-    os.remove("500.mkv")
-
 import os
 import time
 from index import trim_movie, download_movie
 from uploader import upload_clip
 
 MOVIE_PATH = "test.mkv"
+
+# ✅ Force re-download of new test video
+if os.path.exists(MOVIE_PATH):
+    os.remove(MOVIE_PATH)
 
 if __name__ == "__main__":
     while True:
