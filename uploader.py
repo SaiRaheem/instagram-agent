@@ -41,3 +41,8 @@ def upload_clip():
     # Save to posted.txt
     with open(posted_file, "a") as f:
         f.write(f"{next_clip}\n")
+print("\n🔍 ENVIRONMENT DUMP")
+for key in sorted(os.environ):
+    if "IG" in key:
+        print(f"{key} = {os.environ[key]}")
+print("🔍 END ENV DUMP\n")
