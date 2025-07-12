@@ -6,28 +6,21 @@ from moviepy.editor import VideoFileClip
 MOVIE_URL = "https://drive.google.com/uc?id=1jP_09FYxyb1QZhzwWzglHRWS8ZaRZnso"
 MOVIE_PATH = "500.mkv"
 CLIPS_DIR = "clips"
-CLIP_DURATION = 60  # seconds
-MAX_CLIPS = 5       # Limit to 5 clips for testing
+CLIP_DURATION = 60
+MAX_CLIPS = 5
 
 def download_movie(url=MOVIE_URL, dest=MOVIE_PATH):
-    """
-    Downloads the movie from Google Drive using gdown.
-    """
     print("⬇️ Downloading movie from Google Drive with gdown...")
     gdown.download(url, dest, quiet=False)
     print("✅ Movie downloaded successfully.")
 
 def trim_movie(movie_path=MOVIE_PATH, output_folder=CLIPS_DIR, clip_length=CLIP_DURATION, max_clips=MAX_CLIPS):
-    """
-    Trims the movie into clips and saves them in the output folder.
-    """
     print("✂️ Trimming movie into clips...")
     os.makedirs(output_folder, exist_ok=True)
-
     clip = VideoFileClip(movie_path)
     duration = int(clip.duration)
-
     count = 0
+
     for start in range(0, duration, clip_length):
         if count >= max_clips:
             break
@@ -40,7 +33,6 @@ def trim_movie(movie_path=MOVIE_PATH, output_folder=CLIPS_DIR, clip_length=CLIP_
 
     print(f"✅ Created {count} clips.")
 
-# Optional: Run directly for testing
 if __name__ == "__main__":
     if not os.path.exists(MOVIE_PATH):
         download_movie()
