@@ -1,8 +1,29 @@
-from moviepy.editor import VideoFileClip
 import os
+import gdown
+from moviepy.editor import VideoFileClip
 
-def trim_movie(movie_path, output_folder="clips", clip_length=60, max_clips=5):
+# Constants
+MOVIE_URL = "https://drive.google.com/uc?id=1jP_09FYxyb1QZhzwWzglHRWS8ZaRZnso"
+MOVIE_PATH = "500.mkv"
+CLIPS_DIR = "clips"
+CLIP_DURATION = 60  # seconds
+MAX_CLIPS = 5       # Limit to 5 clips for testing
+
+def download_movie(url=MOVIE_URL, dest=MOVIE_PATH):
+    """
+    Downloads the movie from Google Drive using gdown.
+    """
+    print("⬇️ Downloading movie from Google Drive with gdown...")
+    gdown.download(url, dest, quiet=False)
+    print("✅ Movie downloaded successfully.")
+
+def trim_movie(movie_path=MOVIE_PATH, output_folder=CLIPS_DIR, clip_length=CLIP_DURATION, max_clips=MAX_CLIPS):
+    """
+    Trims the movie into clips and saves them in the output folder.
+    """
+    print("✂️ Trimming movie into clips...")
     os.makedirs(output_folder, exist_ok=True)
+
     clip = VideoFileClip(movie_path)
     duration = int(clip.duration)
 
@@ -13,16 +34,14 @@ def trim_movie(movie_path, output_folder="clips", clip_length=60, max_clips=5):
         end = min(start + clip_length, duration)
         subclip = clip.subclip(start, end)
         output_path = os.path.join(output_folder, f"clip_{count:04d}.mp4")
+        print(f"🎬 Saving clip {count + 1}: {output_path}")
         subclip.write_videofile(output_path, codec='libx264', audio=False, logger=None)
         count += 1
 
-if __name__ == "__main__":
-    trim_movie("500.mkv")
-import requests
+    print(f"✅ Created {count} clips.")
 
-def download_movie(url="https://drive.google.com/uc?export=download&id=1jP_09FYxyb1QZhzwWzglHRWS8ZaRZnso", dest="500.mkv"):
-    response = requests.get(url, stream=True)
-    with open(dest, 'wb') as f:
-        for chunk in response.iter_content(chunk_size=8192):
-            if chunk:
-                f.write(chunk)
+# Optional: Run directly for testing
+if __name__ == "__main__":
+    if not os.path.exists(MOVIE_PATH):
+        download_movie()
+    trim_movie()
