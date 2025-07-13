@@ -6,8 +6,8 @@ from moviepy.editor import VideoFileClip
 MOVIE_URL = "https://drive.google.com/uc?id=1z7YRfanuXCGmwnh1hKKc7bG1n9zoh2sF"
 MOVIE_PATH = "test.mkv"
 CLIPS_DIR = "clips"
-CLIP_DURATION = 30  # in seconds
-MAX_CLIPS = 1       # for testing only
+CLIP_DURATION = 15  # in seconds
+MAX_CLIPS = 5       # for testing only
 
 def download_movie(url=MOVIE_URL, dest=MOVIE_PATH):
     print("⬇️ Downloading movie from Google Drive with gdown...")
@@ -34,7 +34,7 @@ def trim_movie(movie_path=MOVIE_PATH, output_folder=CLIPS_DIR, clip_length=CLIP_
         subclip.write_videofile(
             output_path,
             codec='libx264',
-            audio=False,
+            audio=True,
             logger=None,
             ffmpeg_params=["-preset", "ultrafast", "-crf", "32", "-vf", "scale=640:-1"]
         )

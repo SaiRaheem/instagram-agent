@@ -64,7 +64,7 @@ def upload_clip():
         params={
             "media_type": "REELS",
             "video_url": clip_url,
-            "caption": f"🔥 Auto-posted: {next_clip}",
+            "caption":"",
             "access_token": ACCESS_TOKEN
         }
     )
