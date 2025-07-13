@@ -7,7 +7,7 @@ MOVIE_URL = "https://drive.google.com/uc?id=1z7YRfanuXCGmwnh1hKKc7bG1n9zoh2sF"
 MOVIE_PATH = "test.mkv"
 CLIPS_DIR = "clips"
 CLIP_DURATION = 30  # in seconds
-MAX_CLIPS = 5       # for testing only
+MAX_CLIPS = 1       # for testing only
 
 def download_movie(url=MOVIE_URL, dest=MOVIE_PATH):
     print("⬇️ Downloading movie from Google Drive with gdown...")
