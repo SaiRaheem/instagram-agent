@@ -15,6 +15,11 @@ cloudinary.config(
     api_secret=os.getenv("CLOUDINARY_API_SECRET")
 )
 
+print("🔍 DEBUG CLOUDINARY CONFIG")
+print("cloud_name:", os.getenv("CLOUDINARY_CLOUD_NAME"))
+print("api_key:", os.getenv("CLOUDINARY_API_KEY"))
+print("api_secret exists:", bool(os.getenv("CLOUDINARY_API_SECRET")))
+
 def upload_to_cloudinary(file_path):
     try:
         print(f"☁️ Uploading {file_path} to Cloudinary...")
@@ -57,7 +62,7 @@ def upload_clip():
     container_res = requests.post(
         f"https://graph.facebook.com/v19.0/{IG_USER_ID}/media",
         params={
-            "media_type": "VIDEO",
+            "media_type": "REEL",
             "video_url": clip_url,
             "caption": f"🔥 Auto-posted: {next_clip}",
             "access_token": ACCESS_TOKEN
