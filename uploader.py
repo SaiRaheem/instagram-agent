@@ -1,10 +1,10 @@
 import os
-import requests
 import time
+import requests
 import cloudinary
 import cloudinary.uploader
 
-# Load credentials
+# Load Instagram credentials
 ACCESS_TOKEN = os.getenv("IG_TOKEN")
 IG_USER_ID = os.getenv("IG_USER_ID")
 
@@ -15,16 +15,11 @@ cloudinary.config(
     api_secret=os.getenv("CLOUDINARY_API_SECRET")
 )
 
-print("🔍 DEBUG CLOUDINARY CONFIG")
-print("cloud_name:", os.getenv("CLOUDINARY_CLOUD_NAME"))
-print("api_key:", os.getenv("CLOUDINARY_API_KEY"))
-print("api_secret exists:", bool(os.getenv("CLOUDINARY_API_SECRET")))
-
 def upload_to_cloudinary(file_path):
     try:
         print(f"☁️ Uploading {file_path} to Cloudinary...")
         result = cloudinary.uploader.upload_large(file_path, resource_type="video")
-        print(f"✅ Cloudinary upload done: {result['secure_url']}")
+        print(f"✅ Cloudinary upload: {result['secure_url']}")
         return result["secure_url"]
     except Exception as e:
         print(f"❌ Cloudinary upload failed: {e}")
@@ -37,34 +32,32 @@ def upload_clip():
     # Read posted history
     posted = set()
     if os.path.exists(posted_file):
-        with open(posted_file, "r", encoding="utf-8", errors="ignore") as f:
+        with open(posted_file, "r") as f:
             posted = set(f.read().splitlines())
-
 
     # Find next clip
     clips = sorted(f for f in os.listdir(clips_dir) if f.endswith(".mp4"))
     next_clip = next((clip for clip in clips if clip not in posted), None)
-
     if not next_clip:
         print("🎉 All clips uploaded.")
         return
 
     clip_path = os.path.join(clips_dir, next_clip)
 
-    # 1️⃣ Upload to Cloudinary
+    # 1. Upload to Cloudinary
     clip_url = upload_to_cloudinary(clip_path)
     if not clip_url:
         return
 
     print(f"📤 Uploading {next_clip} to Instagram from {clip_url}")
 
-    # 2️⃣ Create media container
+    # 2. Create media container (REEL)
     container_res = requests.post(
         f"https://graph.facebook.com/v19.0/{IG_USER_ID}/media",
         params={
             "media_type": "REELS",
             "video_url": clip_url,
-            "caption":"",
+            "caption": "",  # You can customize caption here
             "access_token": ACCESS_TOKEN
         }
     )
@@ -72,12 +65,11 @@ def upload_clip():
     print("📦 Container Response:", container)
 
     if "id" not in container:
-        print("❌ Failed to create media container:", container)
+        print("❌ Failed to create media container.")
         return
 
-    # 3️⃣ Wait briefly before publishing
+    # 3. Publish media after short delay
     time.sleep(15)
-
     publish_res = requests.post(
         f"https://graph.facebook.com/v19.0/{IG_USER_ID}/media_publish",
         params={
@@ -87,6 +79,6 @@ def upload_clip():
     )
     print("✅ Published Response:", publish_res.json())
 
-    # 4️⃣ Mark as posted
+    # 4. Mark clip as posted
     with open(posted_file, "a") as f:
         f.write(f"{next_clip}\n")
