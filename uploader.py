@@ -32,8 +32,9 @@ def upload_clip():
     # Read posted history
     posted = set()
     if os.path.exists(posted_file):
-        with open(posted_file, "r") as f:
+        with open(posted_file, "r", encoding="utf-8", errors="ignore") as f:
             posted = set(f.read().splitlines())
+
 
     # Find next clip
     clips = sorted(f for f in os.listdir(clips_dir) if f.endswith(".mp4"))
