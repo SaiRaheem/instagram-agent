@@ -7,7 +7,7 @@ MOVIE_URL = "https://drive.google.com/uc?id=1z7YRfanuXCGmwnh1hKKc7bG1n9zoh2sF"
 MOVIE_PATH = "test.mkv"
 CLIPS_DIR = "clips"
 CLIP_DURATION = 15  # seconds
-MAX_CLIPS = 5       # testing limit
+MAX_CLIPS = 1       # testing limit
 
 def download_movie(url=MOVIE_URL, dest=MOVIE_PATH):
     print("⬇️ Downloading movie...")
@@ -26,7 +26,7 @@ def trim_movie(movie_path=MOVIE_PATH, output_folder=CLIPS_DIR, clip_length=CLIP_
         if count >= max_clips:
             break
         end = min(start + clip_length, duration)
-        subclip = clip.subclip(start, end)
+        subclip = clip.subclip(start, end).rotate(90)
         output_path = os.path.join(output_folder, f"clip_{count:04d}.mp4")
 
         print(f"🎬 Saving: {output_path}")
