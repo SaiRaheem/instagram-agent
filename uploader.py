@@ -70,7 +70,7 @@ def upload_clip():
         return
 
     # 3. Publish media after short delay
-    time.sleep(15)
+    time.sleep(2*60)
     publish_res = requests.post(
         f"https://graph.facebook.com/v19.0/{IG_USER_ID}/media_publish",
         params={
