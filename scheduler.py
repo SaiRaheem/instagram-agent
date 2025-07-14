@@ -31,4 +31,4 @@ if __name__ == "__main__":
             print(f"⚠️ Error during cycle: {e}")
 
         print("🕒 Sleeping for 1 minute...\n")
-        time.sleep(60)
+        time.sleep(3*60*60)

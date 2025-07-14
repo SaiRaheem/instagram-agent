@@ -6,8 +6,8 @@ from moviepy.editor import VideoFileClip
 MOVIE_URL = "https://drive.google.com/uc?id=1kuTuAhJV3DxpufNi0riijj8ub0q2FDkt"
 MOVIE_PATH = "test.mkv"
 CLIPS_DIR = "clips"
-CLIP_DURATION = 15  # seconds
-MAX_CLIPS = 1       # testing limit
+CLIP_DURATION = 60  # seconds
+MAX_CLIPS = 5      # testing limit
 
 def download_movie(url=MOVIE_URL, dest=MOVIE_PATH):
     print("⬇️ Downloading movie...")
