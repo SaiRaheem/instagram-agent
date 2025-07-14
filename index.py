@@ -31,12 +31,19 @@ def trim_movie(movie_path=MOVIE_PATH, output_folder=CLIPS_DIR, clip_length=CLIP_
 
         print(f"🎬 Saving: {output_path}")
         subclip.write_videofile(
-            output_path,
-            codec="libx264",
-            audio=True,
-            logger=None,
-            ffmpeg_params=["-preset", "ultrafast", "-crf", "32", "-vf", "scale=640:-1"]
-        )
+        output_path,
+        codec="libx264",
+        audio=True,
+        logger=None,
+        ffmpeg_params=[
+            "-preset", "ultrafast",
+            "-crf", "28",
+            "-movflags", "+faststart",
+            "-pix_fmt", "yuv420p",
+            "-vf", "scale=640:-2"
+        ]
+    )
+
         count += 1
 
     print(f"✅ Done. {count} clips created.")
