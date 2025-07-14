@@ -26,7 +26,7 @@ def trim_movie(movie_path=MOVIE_PATH, output_folder=CLIPS_DIR, clip_length=CLIP_
         if count >= max_clips:
             break
         end = min(start + clip_length, duration)
-        subclip = clip.subclip(start, end)
+        subclip = clip.subclip(start, end).rotate(90)
         output_path = os.path.join(output_folder, f"clip_{count:04d}.mp4")
 
         print(f"🎬 Saving: {output_path}")
