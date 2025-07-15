@@ -11,6 +11,7 @@ MAX_CLIPS = 1       # testing limit
 
 # === FFmpeg Filter String (no scale, max quality) ===
 FILTERS = (
+    "transpose=1,"
     "eq=brightness=0.1:contrast=1.4:saturation=1.4,"
     "unsharp=5:5:1.0:5:5:0.0,"
     "curves=preset=medium_contrast"
@@ -33,7 +34,7 @@ def trim_movie(movie_path=MOVIE_PATH, output_folder=CLIPS_DIR, clip_length=CLIP_
         if count >= max_clips:
             break
         end = min(start + clip_length, duration)
-        subclip = clip.subclip(start, end).rotate(90)
+        subclip = clip.subclip(start, end)
         output_path = os.path.join(output_folder, f"clip_{count:04d}.mp4")
 
         print(f"🎬 Saving: {output_path}")
