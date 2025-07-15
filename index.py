@@ -1,15 +1,15 @@
 import os
+import subprocess
 import gdown
 from moviepy.editor import VideoFileClip
 
-# === CONFIG ===
 MOVIE_URL = "https://drive.google.com/uc?id=1kuTuAhJV3DxpufNi0riijj8ub0q2FDkt"
 MOVIE_PATH = "test.mkv"
 CLIPS_DIR = "clips"
-CLIP_DURATION = 30  # seconds
-MAX_CLIPS = 1       # testing limit
+CLIP_DURATION = 30
+MAX_CLIPS = 1
 
-# === FFmpeg Filter String (no scale, max quality) ===
+# FFmpeg filter chain
 FILTERS = (
     "transpose=1,"
     "eq=brightness=0.1:contrast=1.4:saturation=1.4,"
@@ -23,7 +23,7 @@ def download_movie(url=MOVIE_URL, dest=MOVIE_PATH):
     print("✅ Download complete.")
 
 def trim_movie(movie_path=MOVIE_PATH, output_folder=CLIPS_DIR, clip_length=CLIP_DURATION, max_clips=MAX_CLIPS):
-    print("✂️ Trimming into clips...")
+    print("✂️ Trimming into raw clips...")
     os.makedirs(output_folder, exist_ok=True)
 
     clip = VideoFileClip(movie_path)
@@ -33,30 +33,37 @@ def trim_movie(movie_path=MOVIE_PATH, output_folder=CLIPS_DIR, clip_length=CLIP_
     for start in range(0, duration, clip_length):
         if count >= max_clips:
             break
+
         end = min(start + clip_length, duration)
         subclip = clip.subclip(start, end)
-        output_path = os.path.join(output_folder, f"clip_{count:04d}.mp4")
+        raw_output = os.path.join(output_folder, f"clip_{count:04d}_raw.mp4")
+        final_output = os.path.join(output_folder, f"clip_{count:04d}.mp4")
 
-        print(f"🎬 Saving: {output_path}")
+        print(f"🎞 Exporting raw clip: {raw_output}")
         subclip.write_videofile(
-            output_path,
+            raw_output,
             codec="libx264",
             audio=True,
-            logger='bar',
-            ffmpeg_params=[
-                "-preset", "slow",
-                "-crf", "20",
-                "-movflags", "+faststart",
-                "-pix_fmt", "yuv420p",
-                "-vf", FILTERS
-            ]
+            preset="ultrafast",
+            logger="bar"
         )
+
+        # Apply filters using FFmpeg
+        print(f"🎨 Enhancing clip with FFmpeg filters: {final_output}")
+        cmd = [
+            "ffmpeg", "-y",
+            "-i", raw_output,
+            "-vf", FILTERS,
+            "-c:v", "libx264",
+            "-crf", "20",
+            "-preset", "slow",
+            "-c:a", "copy",
+            final_output
+        ]
+        subprocess.run(cmd, check=True)
+
+        # Clean up raw file
+        os.remove(raw_output)
         count += 1
 
-    print(f"✅ Done. {count} clips created.")
-
-
-if __name__ == "__main__":
-    if not os.path.exists(MOVIE_PATH):
-        download_movie()
-    trim_movie()
+    print(f"✅ Done. {count} filtered clip(s) created.")
