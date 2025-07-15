@@ -11,7 +11,6 @@ MAX_CLIPS = 1       # testing limit
 
 # === FFmpeg Filter String (no scale, max quality) ===
 FILTERS = (
-    "transpose=1,"
     "eq=brightness=0.1:contrast=1.4:saturation=1.4,"
     "unsharp=5:5:1.0:5:5:0.0,"
     "curves=preset=medium_contrast"
