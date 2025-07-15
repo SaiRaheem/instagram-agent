@@ -3,3 +3,4 @@ instagrapi
 python-dotenv
 gdown
 cloudinary
+ffmpeg
