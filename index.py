@@ -6,8 +6,15 @@ from moviepy.editor import VideoFileClip
 MOVIE_URL = "https://drive.google.com/uc?id=1kuTuAhJV3DxpufNi0riijj8ub0q2FDkt"
 MOVIE_PATH = "test.mkv"
 CLIPS_DIR = "clips"
-CLIP_DURATION = 60  # seconds
-MAX_CLIPS = 5      # testing limit
+CLIP_DURATION = 30  # seconds
+MAX_CLIPS = 1       # testing limit
+
+# === FFmpeg Filter String (no scale, max quality) ===
+FILTERS = (
+    "eq=brightness=0.1:contrast=1.4:saturation=1.4,"
+    "unsharp=5:5:1.0:5:5:0.0,"
+    "curves=preset=medium_contrast"
+)
 
 def download_movie(url=MOVIE_URL, dest=MOVIE_PATH):
     print("⬇️ Downloading movie...")
@@ -36,11 +43,11 @@ def trim_movie(movie_path=MOVIE_PATH, output_folder=CLIPS_DIR, clip_length=CLIP_
             audio=True,
             logger=None,
             ffmpeg_params=[
-                "-preset", "ultrafast",
-                "-crf", "28",
+                "-preset", "slow",
+                "-crf", "18",
                 "-movflags", "+faststart",
                 "-pix_fmt", "yuv420p",
-                "-vf", "scale=640:-2"
+                "-vf", FILTERS
             ]
         )
         count += 1
