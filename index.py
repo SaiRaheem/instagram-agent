@@ -33,7 +33,7 @@ def trim_movie(movie_path=MOVIE_PATH, output_folder=CLIPS_DIR, clip_length=CLIP_
         if count >= max_clips:
             break
         end = min(start + clip_length, duration)
-        subclip = clip.subclip(start, end).rotate(90)
+        subclip = clip.subclip(start, end)
         output_path = os.path.join(output_folder, f"clip_{count:04d}.mp4")
 
         print(f"🎬 Saving: {output_path}")
@@ -41,10 +41,10 @@ def trim_movie(movie_path=MOVIE_PATH, output_folder=CLIPS_DIR, clip_length=CLIP_
             output_path,
             codec="libx264",
             audio=True,
-            logger=None,
+            logger='bar',
             ffmpeg_params=[
                 "-preset", "slow",
-                "-crf", "18",
+                "-crf", "20",
                 "-movflags", "+faststart",
                 "-pix_fmt", "yuv420p",
                 "-vf", FILTERS
@@ -53,6 +53,7 @@ def trim_movie(movie_path=MOVIE_PATH, output_folder=CLIPS_DIR, clip_length=CLIP_
         count += 1
 
     print(f"✅ Done. {count} clips created.")
+
 
 if __name__ == "__main__":
     if not os.path.exists(MOVIE_PATH):
