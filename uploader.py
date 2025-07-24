@@ -4,16 +4,16 @@ import requests
 import cloudinary
 import cloudinary.uploader
 
-# Load Instagram credentials
+# === TEMPORARY HARDCODED CREDENTIALS (for testing only) ===
+cloudinary.config(
+    cloud_name="your_cloud_name",
+    api_key="your_api_key",
+    api_secret="your_api_secret"
+)
+
+# === Instagram credentials ===
 ACCESS_TOKEN = os.getenv("IG_TOKEN")
 IG_USER_ID = os.getenv("IG_USER_ID")
-
-# Setup Cloudinary
-cloudinary.config(
-    cloud_name=os.getenv("CLOUDINARY_CLOUD_NAME"),
-    api_key=os.getenv("CLOUDINARY_API_KEY"),
-    api_secret=os.getenv("CLOUDINARY_API_SECRET")
-)
 
 def upload_to_cloudinary(file_path):
     try:
@@ -35,20 +35,19 @@ def upload_clip():
         with open(posted_file, "r", encoding="utf-8", errors="ignore") as f:
             posted = set(f.read().splitlines())
 
-
     # Find next clip
     clips = sorted(f for f in os.listdir(clips_dir) if f.endswith(".mp4"))
     next_clip = next((clip for clip in clips if clip not in posted), None)
     if not next_clip:
         print("🎉 All clips uploaded.")
-        return
+        return False
 
     clip_path = os.path.join(clips_dir, next_clip)
 
     # 1. Upload to Cloudinary
     clip_url = upload_to_cloudinary(clip_path)
     if not clip_url:
-        return
+        return False
 
     print(f"📤 Uploading {next_clip} to Instagram from {clip_url}")
 
@@ -58,7 +57,7 @@ def upload_clip():
         params={
             "media_type": "REELS",
             "video_url": clip_url,
-            "caption": "",  # You can customize caption here
+            "caption": "📽️ Auto-uploaded Reel",
             "access_token": ACCESS_TOKEN
         }
     )
@@ -67,10 +66,12 @@ def upload_clip():
 
     if "id" not in container:
         print("❌ Failed to create media container.")
-        return
+        return False
 
     # 3. Publish media after short delay
-    time.sleep(2*60)
+    print("⏳ Waiting 2 minutes before publishing...")
+    time.sleep(2 * 60)
+
     publish_res = requests.post(
         f"https://graph.facebook.com/v19.0/{IG_USER_ID}/media_publish",
         params={
@@ -83,3 +84,5 @@ def upload_clip():
     # 4. Mark clip as posted
     with open(posted_file, "a") as f:
         f.write(f"{next_clip}\n")
+
+    return True

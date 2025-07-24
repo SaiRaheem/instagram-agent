@@ -24,8 +24,11 @@ if __name__ == "__main__":
 
             # 3. Upload one clip
             print("⬆️ Uploading a clip...")
-            upload_clip()
-            print("✅ Upload complete.")
+            success = upload_clip()
+            if success:
+                print("✅ Upload complete.")
+            else:
+                print("❌ Upload skipped or failed.")
 
         except Exception as e:
             print(f"⚠️ Error during cycle: {e}")

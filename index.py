@@ -9,13 +9,6 @@ CLIPS_DIR = "clips"
 CLIP_DURATION = 60  # seconds
 MAX_CLIPS = 1       # testing limit
 
-# === FFmpeg Filter String (no scale, max quality) ===
-FILTERS = (
-    "eq=brightness=0.1:contrast=1.4:saturation=1.4,"
-    "unsharp=5:5:1.0:5:5:0.0,"
-    "curves=preset=medium_contrast"
-)
-
 def download_movie(url=MOVIE_URL, dest=MOVIE_PATH):
     print("⬇️ Downloading movie...")
     gdown.download(url, dest, quiet=False)
@@ -42,12 +35,11 @@ def trim_movie(movie_path=MOVIE_PATH, output_folder=CLIPS_DIR, clip_length=CLIP_
             codec="libx264",
             audio=True,
             logger=None,
+            preset="slow",
             ffmpeg_params=[
-                "-preset", "slow",
                 "-crf", "18",
                 "-movflags", "+faststart",
-                "-pix_fmt", "yuv420p",
-                "-vf", FILTERS
+                "-pix_fmt", "yuv420p"
             ]
         )
         count += 1
