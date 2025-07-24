@@ -6,9 +6,9 @@ import cloudinary.uploader
 
 # === TEMPORARY HARDCODED CREDENTIALS (for testing only) ===
 cloudinary.config(
-    cloud_name="your_cloud_name",
-    api_key="your_api_key",
-    api_secret="your_api_secret"
+    cloud_name="dhurkvvej",
+    api_key="178575191371392",
+    api_secret="pyyptSWyng24f0PBRDFPoUKU3NY"
 )
 
 # === Instagram credentials ===
