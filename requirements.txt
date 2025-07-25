@@ -3,3 +3,4 @@ instagrapi
 python-dotenv
 gdown
 cloudinary
+ffmpeg-python>=0.2.0  # Better FFmpeg control
