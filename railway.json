@@ -1,13 +1,15 @@
 {
   "build": {
     "env": {
-      "PYTHONUNBUFFERED": "1"
-    }
-  },
-  "start": {
-    "cmd": "python scheduler.py",
-    "env": {
+      "PYTHONUNBUFFERED": "1",
       "NODE_ENV": "production"
+    },
+    "builder": "nixpacks"
+  },
+  "deploy": {
+    "startCommand": "python scheduler.py",
+    "restartPolicy": {
+      "maxRetries": 3
     }
   }
 }

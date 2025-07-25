@@ -59,6 +59,15 @@ def check_container_status(container_id):
         return False
 
 def upload_clip():
+    # Add at the start of upload_clip()
+    required_vars = ["IG_TOKEN", "IG_USER_ID", 
+                "CLOUDINARY_CLOUD_NAME", 
+                "CLOUDINARY_API_KEY", 
+                "CLOUDINARY_API_SECRET"]
+    missing = [var for var in required_vars if not os.getenv(var)]
+    if missing:
+        logger.critical(f"Missing environment variables: {', '.join(missing)}")
+        return False
     try:
         posted_file = os.getenv("POSTED_FILE", "posted.txt")
         clips_dir = os.getenv("CLIPS_DIR", "clips")
@@ -149,4 +158,4 @@ def upload_clip():
 
     except Exception as e:
         logger.error(f"Error in upload_clip: {str(e)}")
-        return False
+        return False    

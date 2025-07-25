@@ -24,6 +24,10 @@ VIDEO_CODEC = os.getenv("VIDEO_CODEC", "libx264")
 AUDIO_CODEC = os.getenv("AUDIO_CODEC", "aac")
 
 def download_movie(url=None, dest=None):
+    # Add at the start of download_movie()
+    if not MOVIE_URL:
+        logger.critical("MOVIE_URL environment variable not set!")
+        raise ValueError("MOVIE_URL is required")
     try:
         url = url or MOVIE_URL
         dest = dest or MOVIE_PATH
