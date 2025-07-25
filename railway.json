@@ -4,5 +4,10 @@
       "PYTHONUNBUFFERED": "1"
     }
   },
-  "start": "python scheduler.py"
+  "start": {
+    "cmd": "python scheduler.py",
+    "env": {
+      "NODE_ENV": "production"
+    }
+  }
 }
